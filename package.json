@@ -1,0 +1,20 @@
+{
+  "name": "google-chat-shuffler",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/dyaskur/google-chat-shuffler.git",
+  "scripts": {
+    "test": "ENV_VARIABLE=dev NODE_OPTIONS=--experimental-vm-modules jest --coverage",
+    "deploy": "gcloud functions deploy app --trigger-http --security-level=secure-always --allow-unauthenticated --runtime nodejs18 --region=asia-southeast1"
+  },
+  "author": "Dyas Yaskur <dyas@yaskur.com>",
+  "license": "MIT",
+  "dependencies": {
+    "googleapis": "^118.0.0"
+  },
+  "devDependencies": {
+    "eslint-config-google": "^0.14.0",
+    "jest": "^29.5.0"
+  },
+  "type": "module"
+}
