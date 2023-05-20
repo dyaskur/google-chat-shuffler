@@ -27,8 +27,11 @@ export function buildNameListSection(names) {
       }],
   };
 
+  const range = Array.from({length: names.length}, (_, i) => i + 1);
+  const random = range.map((value) => ({value, sort: Math.random()}))
+      .sort((a, b) => a.sort - b.sort).map(({value}) => value);
   for (let i = 0; i < names.length; i++) {
-    const url = `https://raw.githubusercontent.com/0fat/titip_asset/main/${names.length}/${i + 1}.gif`;
+    const url = `https://raw.githubusercontent.com/dyaskur/google-chat-shuffler/master/assets/${names.length}/${random[i]}.gif?12`;
     sections.sections[0].widgets.push(buildDecoratorText(names[i], url));
   }
   return sections;

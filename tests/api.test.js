@@ -1,15 +1,19 @@
 import {createMessage, getMembers, getMessage, updateMessage} from '../src/helpers/api';
 import {buildMessageBody, buildNameListSection} from '../src/helpers/components.js';
-
 // This file consists of several tests that I utilized to experiment with the Google Chat API.
 test.skip('get space memberships', async () => {
+  // I move this to here for temporary, because this is skipped but affect the test coverage
+
   const members = await getMembers('spaces/AAAAqFtzdps');
 
   expect(members.length).toBeGreaterThan(0);
 
   // const memberName = members.map(a => a.member.displayName);
-  const memberName = ['1', '2', '3', '4', '5', '6'];
-  const message = buildMessageBody(buildNameListSection(memberName));
+  // const memberName = ['1', '2', '3', '4', '5', '6'];
+  const memberName = Array.from({length: 32}, (_, i) => (i + 1).toString());
+
+  const cardSection = buildNameListSection(memberName);
+  const message = buildMessageBody(cardSection);
   const options = {thread: {name: 'spaces/AAAAqFtzdps/threads/pfyovAULzfo'}};
 
   const request = {
