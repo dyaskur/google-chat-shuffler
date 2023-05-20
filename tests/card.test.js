@@ -16,7 +16,7 @@ test('build name list card', () => {
             'decoratedText': {
               'text': 'Yaskur',
               'startIcon': {
-                'iconUrl': 'https://raw.githubusercontent.com/0fat/titip_asset/main/2.gif',
+                'iconUrl': 'https://raw.githubusercontent.com/0fat/titip_asset/main/4/1.gif',
               },
             },
           },
@@ -24,7 +24,7 @@ test('build name list card', () => {
             'decoratedText': {
               'text': 'Nganu',
               'startIcon': {
-                'iconUrl': 'https://raw.githubusercontent.com/0fat/titip_asset/main/3.gif',
+                'iconUrl': 'https://raw.githubusercontent.com/0fat/titip_asset/main/4/2.gif',
               },
             },
           },
@@ -32,7 +32,7 @@ test('build name list card', () => {
             'decoratedText': {
               'text': 'Dyas',
               'startIcon': {
-                'iconUrl': 'https://raw.githubusercontent.com/0fat/titip_asset/main/4.gif',
+                'iconUrl': 'https://raw.githubusercontent.com/0fat/titip_asset/main/4/3.gif',
               },
             },
           },
@@ -40,7 +40,7 @@ test('build name list card', () => {
             'decoratedText': {
               'text': 'Muhammad',
               'startIcon': {
-                'iconUrl': 'https://raw.githubusercontent.com/0fat/titip_asset/main/5.gif',
+                'iconUrl': 'https://raw.githubusercontent.com/0fat/titip_asset/main/4/4.gif',
               },
             },
           },

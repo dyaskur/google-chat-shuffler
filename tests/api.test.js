@@ -2,7 +2,7 @@ import {createMessage, getMembers, getMessage, updateMessage} from '../src/helpe
 import {buildMessageBody, buildNameListSection} from '../src/helpers/components.js';
 
 // This file consists of several tests that I utilized to experiment with the Google Chat API.
-test('get space memberships', async () => {
+test.skip('get space memberships', async () => {
   const members = await getMembers('spaces/AAAAqFtzdps');
 
   expect(members.length).toBeGreaterThan(0);
@@ -19,7 +19,6 @@ test('get space memberships', async () => {
     messageReplyOption: 'REPLY_MESSAGE_OR_FAIL',
   };
   options.threadKey = options.thread.name;
-
 
   const apiResponse = await createMessage(request, options);
   const messageId = apiResponse.data.name;
