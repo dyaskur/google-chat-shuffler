@@ -2,6 +2,7 @@ import {createMessage, getMembers, updateMessage} from './src/helpers/api.js';
 
 import {buildActionResponse} from './src/helpers/response.js';
 import {buildMessageBody, buildNameListSection} from './src/helpers/components.js';
+import {delayUpdateMessage} from './src/helpers/task.js';
 
 /**
  * App entry point.
@@ -10,7 +11,23 @@ import {buildMessageBody, buildNameListSection} from './src/helpers/components.j
  * @returns {void}
  */
 export async function app(req, res) {
-  if (!(req.method === 'POST' && req.body)) {
+  if (req.method === 'PATCH' && req.body) {
+    console.log('received from queue', req.body);
+    console.log(JSON.stringify(req.body));
+    // const messageResponse = await getMessage(message_id);
+
+    const message = {
+      text: 'This is updated message',
+    };
+    const request = {
+      name: req.body,
+      requestBody: message,
+      updateMask: 'text',
+    };
+    const apiResponse = await updateMessage(request);
+    console.log(JSON.stringify(apiResponse));
+    res.status(200).send('');
+  } else if (!(req.method === 'POST' && req.body)) {
     res.status(400).send('');
   }
   const event = req.body;
@@ -30,12 +47,13 @@ export async function app(req, res) {
       const cardSection = buildNameListSection(members.map((a) => a.member.displayName));
       const message = buildMessageBody(cardSection);
 
-      reply = {
-        actionResponse: {
-          type: 'NEW_MESSAGE',
-        },
-        ...message,
+      const request = {
+        parent: event.space.name,
+        requestBody: message,
       };
+      const apiResponse = await createMessage(request);
+      const messageId = apiResponse.data.name;
+      await delayUpdateMessage(messageId);
     } else if (message.text) {
       // todo: handle mentioned message
     }
