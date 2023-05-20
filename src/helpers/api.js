@@ -1,5 +1,5 @@
-import {google} from 'googleapis'
-import * as path from "path";
+import {google} from 'googleapis';
+import * as path from 'path';
 
 /**
  * Create google api credentials
@@ -10,9 +10,9 @@ function gAuth() {
   // Use default credentials (service account)
   const options = {
     scopes: ['https://www.googleapis.com/auth/chat.bot'],
-  }
+  };
   if (process.env.ENV_VARIABLE === 'dev') {
-    options.keyFile = path.join(process.cwd(), 'tests/creds.json')
+    options.keyFile = path.join(process.cwd(), 'tests/creds.json');
   }
   const credentials = new google.auth.GoogleAuth(options);
   return google.chat({
@@ -22,12 +22,35 @@ function gAuth() {
 }
 
 /**
+ * Get a message by message name/id
+ *
+ * @param {string} messageName - message id from google chat API
+ * @returns {object} Response from google api
+ */
+export async function getMessage(messageName) {
+  const chatApi = gAuth();
+  let response;
+  const request = {
+    'name': messageName,
+  };
+  try {
+    response = await chatApi.spaces.messages.get(request);
+  } catch (error) {
+    console.error('Error when trying to create message:', JSON.stringify(request), response);
+    throw new Error(error.toString());
+  }
+
+  return response.data ?? {};
+}
+
+/**
  * Create a new message API
  *
  * @param {object} request - request body
+ * @param {object} options - query params
  * @returns {object} Response from google api
  */
-export async function createMessage(request, options) {
+export async function createMessage(request, options = {}) {
   const chatApi = gAuth();
   let response;
 
@@ -78,7 +101,7 @@ export async function getMembers(space) {
     console.error('Error when trying to get member list:', space, response);
     throw new Error(error.toString());
   }
-// todo: get data from second page onward
-  return response.data?.memberships || [];
+  // todo: get data from second page onward
+  return response.data?.memberships ?? [];
 }
 
