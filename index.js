@@ -1,5 +1,4 @@
-import {createMessage, getMembers} from './helpers/api.js';
-
+import {getMembers} from './helpers/api.js';
 import {buildActionResponse, buildActionResponseStatus} from './helpers/response.js';
 import {createMessageFromNameListHandler, updateWinnerCardHandler} from './handlers.js';
 import {extractMessage} from './helpers/utils.js';
@@ -63,19 +62,15 @@ export async function app(req, res) {
       reply = buildActionResponseStatus('Your items/names are being shuffle');
     }
   } else if (event.type === 'ADDED_TO_SPACE') {
-    const message = {};
-    message.text = 'Hi there! You can shuffle your team mate using this app';
+    const message = 'Hi there! You can shuffle your team mate using this app';
 
-    const request = {
-      parent: event.space.name,
-      requestBody: message,
+    reply = {
+      // thread: event.message.thread,
+      actionResponse: {
+        type: 'NEW_MESSAGE',
+      },
+      text: message,
     };
-    const apiResponse = await createMessage(request);
-    if (apiResponse) {
-      reply = buildActionResponseStatus('Thanks for installing our app', 'OK');
-    } else {
-      reply = buildActionResponseStatus('Failed to send welcome.', 'UNKNOWN');
-    }
   }
   res.json(reply);
 }
