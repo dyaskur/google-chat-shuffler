@@ -36,9 +36,9 @@ export function buildActionResponse(type, message) {
     },
   };
   if (type === 'DIALOG') {
-    responseBody.dialogAction = {
+    responseBody.actionResponse.dialogAction = {
       dialog: {
-        body: message.cardsV2,
+        body: message,
       },
     };
     return responseBody;

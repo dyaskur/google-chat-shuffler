@@ -80,3 +80,44 @@ export function buildMessageBody(card, text = '') {
     ],
   };
 }
+
+/**
+ * @param {array} defaultValues - defaultValues
+ * @returns {object} - shuffle form
+ */
+export function buildInputForm(defaultValues) {
+  return {
+    'sections': [
+      {
+        'header': 'Names',
+        'widgets': [
+          {
+            'textInput': {
+              'label': 'Please input the items',
+              'type': 'MULTIPLE_LINE',
+              'name': 'items',
+              'value': defaultValues.join('\n'),
+            },
+          },
+        ],
+      },
+    ],
+    'fixedFooter': {
+      'primaryButton': {
+        'text': 'Submit',
+        'onClick': {
+          'action': {
+            'function': 'create_shuffle',
+            'parameters': [],
+          },
+        },
+      },
+    },
+    'header': {
+      'title': 'Maximum item is 32.',
+      'subtitle': 'If the items are more than 32, the items will be randomly cut to 32',
+      'imageUrl': '',
+      'imageType': 'CIRCLE',
+    },
+  };
+}

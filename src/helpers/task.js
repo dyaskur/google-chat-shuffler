@@ -14,7 +14,7 @@ export async function delayUpdateMessage(payload) {
   const queue = process.env.QUEUE_NAME;
   const location = process.env.FUNCTION_REGION;
   const url = `https://${location}-${project}.cloudfunctions.net/app`;
-  const inSeconds = 30;
+  const inSeconds = 12;
 
   // Construct the fully qualified queue name.
   const parent = client.queuePath(project, location, queue);

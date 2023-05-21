@@ -1,9 +1,9 @@
 import {createMessage, getMembers} from './src/helpers/api.js';
 
-import {buildActionResponseStatus} from './src/helpers/response.js';
-import {buildMessageBody, buildNameListSection} from './src/helpers/components.js';
-import {delayUpdateMessage} from './src/helpers/task.js';
-import {updateWinnerCardHandler} from './handlers.js';
+import {buildActionResponse, buildActionResponseStatus} from './src/helpers/response.js';
+import {createMessageFromNameListHandler, updateWinnerCardHandler} from './handlers.js';
+import {extractMessage} from './src/helpers/utils.js';
+import {buildInputForm} from './src/helpers/components.js';
 
 /**
  * App entry point.
@@ -30,33 +30,37 @@ export async function app(req, res) {
   if (event.type === 'MESSAGE') {
     const message = event.message;
     if (message.slashCommand?.commandId === '1') {
-      // reply = showShuffleForm(event);
-      // todo: handle suffle form dialog
+      const members = await getMembers(event.space.name);
+      const memberNames = members.map((a) => a.member.displayName);
+      const inputFormCard = buildInputForm(memberNames);
+      reply = buildActionResponse('DIALOG', inputFormCard);
     } else if (message.slashCommand?.commandId === '2') {
       const members = await getMembers(event.space.name);
       const memberNames = members.map((a) => a.member.displayName);
-      const cardSection = buildNameListSection(memberNames);
-      const message = buildMessageBody(cardSection);
-
-      const request = {
-        parent: event.space.name,
-        threadKey: event.threadKey ?? event.message.thread.name,
-        requestBody: message,
-        messageReplyOption: 'REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD',
-      };
-      const apiResponse = await createMessage(request, {
-        thread: {name: event.message.thread.name},
-        threadKey: event.threadKey ?? event.message.thread.name,
-      });
-
-      const messageId = apiResponse.data.name;
-      const payload = {
-        messageId,
-        names: memberNames,
-      };
-      await delayUpdateMessage(JSON.stringify(payload));
+      await createMessageFromNameListHandler(memberNames, event.space.name, event.threadKey);
     } else if (message.text) {
-      // todo: handle mentioned message
+      const argumentText = event.message?.argumentText;
+      const extractedText = extractMessage(argumentText);
+      if (extractedText.length > 1) {
+        await createMessageFromNameListHandler(extractedText, event.space.name, event.threadKey);
+      } else {
+        reply = {
+          thread: event.message.thread,
+          actionResponse: {
+            type: 'NEW_MESSAGE',
+          },
+          text: 'Sorry you need at least 2 items to do shuffle. Try *@Shuffle Maven "Alexandro Manta" "Hasan Monero"*. ' +
+              'Or you can also use */shuffle_members* command to quick shuffle all member of this space',
+        };
+      }
+    }
+  } else if (event.type === 'CARD_CLICKED') {
+    const action = event.common?.invokedFunction;
+    if (action === 'create_shuffle') {
+      const formValues = event.common?.formInputs;
+      const items = formValues?.['items']?.stringInputs.value[0]?.trim();
+      await createMessageFromNameListHandler(items.split('\n'), event.space.name, event.threadKey);
+      reply = buildActionResponseStatus('Your items/names are being shuffle');
     }
   } else if (event.type === 'ADDED_TO_SPACE') {
     const message = {};
