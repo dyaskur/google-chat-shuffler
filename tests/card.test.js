@@ -70,7 +70,7 @@ test('build name list card with a winner', () => {
     'Zulkarnain',
     'Sulaiman',
   ];
-  const section = buildNameListWinnerSection(names, ['Yaskur']);
+  const winnerSection = buildNameListWinnerSection(names, ['Yaskur']);
   const expected = {
     'sections': [
       {
@@ -87,7 +87,7 @@ test('build name list card with a winner', () => {
             'decoratedText': {
               'text': 'Ibrahim',
               'startIcon': {
-                'iconUrl': expect.any(String),
+                'iconUrl': 'https://upload.wikimedia.org/wikipedia/commons/3/38/Solid_white_bordered.png',
               },
             },
           },
@@ -95,7 +95,7 @@ test('build name list card with a winner', () => {
             'decoratedText': {
               'text': 'Ismail',
               'startIcon': {
-                'iconUrl': expect.any(String),
+                'iconUrl': 'https://upload.wikimedia.org/wikipedia/commons/3/38/Solid_white_bordered.png',
               },
             },
           },
@@ -103,7 +103,7 @@ test('build name list card with a winner', () => {
             'decoratedText': {
               'text': 'Zulkarnain',
               'startIcon': {
-                'iconUrl': expect.any(String),
+                'iconUrl': 'https://upload.wikimedia.org/wikipedia/commons/3/38/Solid_white_bordered.png',
               },
             },
           },
@@ -111,7 +111,7 @@ test('build name list card with a winner', () => {
             'decoratedText': {
               'text': 'Sulaiman',
               'startIcon': {
-                'iconUrl': expect.any(String),
+                'iconUrl': 'https://upload.wikimedia.org/wikipedia/commons/3/38/Solid_white_bordered.png',
               },
             },
           },
@@ -119,5 +119,5 @@ test('build name list card with a winner', () => {
       },
     ],
   };
-  expect(section).toStrictEqual(expected);
+  expect(winnerSection).toStrictEqual(expected);
 });
