@@ -18,3 +18,5 @@ assets
 *.md
 assets
 coverage
+*.yaml
+*.example
