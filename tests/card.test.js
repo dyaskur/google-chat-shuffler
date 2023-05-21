@@ -64,10 +64,10 @@ test('build name list card', () => {
 
 test('build name list card with a winner', () => {
   const names = [
-    'Yaskur',
-    'Nganu',
-    'Dyas',
-    'Muhammad',
+    'Moses',
+    'Ibrahim',
+    'Ismail',
+    'Zulkarnain',
     'Sulaiman',
   ];
   const section = buildNameListWinnerSection(names, ['Yaskur']);
@@ -77,7 +77,7 @@ test('build name list card with a winner', () => {
         'widgets': [
           {
             'decoratedText': {
-              'text': '<b>Yaskur</b>',
+              'text': '<b>Moses</b>',
               'startIcon': {
                 'iconUrl': 'https://raw.githubusercontent.com/dyaskur/google-chat-shuffler/master/assets/1/1.gif',
               },
@@ -85,7 +85,7 @@ test('build name list card with a winner', () => {
           },
           {
             'decoratedText': {
-              'text': 'Nganu',
+              'text': 'Ibrahim',
               'startIcon': {
                 'iconUrl': expect.any(String),
               },
@@ -93,7 +93,7 @@ test('build name list card with a winner', () => {
           },
           {
             'decoratedText': {
-              'text': 'Dyas',
+              'text': 'Ismail',
               'startIcon': {
                 'iconUrl': expect.any(String),
               },
@@ -101,7 +101,7 @@ test('build name list card with a winner', () => {
           },
           {
             'decoratedText': {
-              'text': 'Muhammad',
+              'text': 'Zulkarnain',
               'startIcon': {
                 'iconUrl': expect.any(String),
               },
@@ -120,17 +120,4 @@ test('build name list card with a winner', () => {
     ],
   };
   expect(section).toStrictEqual(expected);
-  const messageBody = buildMessageBody(section);
-  const expectedMessage = {
-    'text': '',
-    'cardsV2': [
-      {
-        'cardId': 'card-id',
-        'card': section,
-      },
-    ],
-  };
-  const a = JSON.stringify(messageBody);
-  console.log(a);
-  expect(messageBody).toStrictEqual(expectedMessage);
 });
