@@ -45,10 +45,10 @@ test('test action dialog', () => {
   const expectedMessage2 = {
     'actionResponse': {
       'type': 'DIALOG',
-    },
-    'dialogAction': {
-      dialog: {
-        body: message.cardsV2,
+      'dialogAction': {
+        dialog: {
+          body: message,
+        },
       },
     },
   };
