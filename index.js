@@ -1,9 +1,8 @@
-import {createMessage, getMembers} from './src/helpers/api.js';
-
-import {buildActionResponse, buildActionResponseStatus} from './src/helpers/response.js';
+import {getMembers} from './helpers/api.js';
+import {buildActionResponse, buildActionResponseStatus} from './helpers/response.js';
 import {createMessageFromNameListHandler, updateWinnerCardHandler} from './handlers.js';
-import {extractMessage} from './src/helpers/utils.js';
-import {buildInputForm} from './src/helpers/components.js';
+import {extractMessage} from './helpers/utils.js';
+import {buildInputForm} from './helpers/components.js';
 
 /**
  * App entry point.
@@ -29,12 +28,12 @@ export async function app(req, res) {
   // Dispatch slash and action events
   if (event.type === 'MESSAGE') {
     const message = event.message;
-    if (message.slashCommand?.commandId === '1') {
+    if (message.slashCommand?.commandId === '1') { // /shuffle command
       const members = await getMembers(event.space.name);
       const memberNames = members.map((a) => a.member.displayName);
       const inputFormCard = buildInputForm(memberNames);
       reply = buildActionResponse('DIALOG', inputFormCard);
-    } else if (message.slashCommand?.commandId === '2') {
+    } else if (message.slashCommand?.commandId === '2') { // /shuffle_members command
       const members = await getMembers(event.space.name);
       const memberNames = members.map((a) => a.member.displayName);
       await createMessageFromNameListHandler(memberNames, event.space.name, event.threadKey);
@@ -63,19 +62,15 @@ export async function app(req, res) {
       reply = buildActionResponseStatus('Your items/names are being shuffle');
     }
   } else if (event.type === 'ADDED_TO_SPACE') {
-    const message = {};
-    message.text = 'Hi there! You can shuffle your team mate using this app';
+    const message = 'Hi there! You can shuffle your team mate using this app';
 
-    const request = {
-      parent: event.space.name,
-      requestBody: message,
+    reply = {
+      // thread: event.message.thread,
+      actionResponse: {
+        type: 'NEW_MESSAGE',
+      },
+      text: message,
     };
-    const apiResponse = await createMessage(request);
-    if (apiResponse) {
-      reply = buildActionResponseStatus('Thanks for installing our app', 'OK');
-    } else {
-      reply = buildActionResponseStatus('Failed to send welcome.', 'UNKNOWN');
-    }
   }
   res.json(reply);
 }

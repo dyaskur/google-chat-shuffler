@@ -1,4 +1,4 @@
-import {extractMessage, getRandomWinners} from '../src/helpers/utils.js';
+import {extractMessage, getRandomWinners} from '../helpers/utils.js';
 
 test('get the winner', () => {
   const names = ['Ibrahim', 'Isa', 'Moses', 'Ismail'];

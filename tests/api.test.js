@@ -1,5 +1,5 @@
-import {createMessage, getMembers, getMessage, updateMessage} from '../src/helpers/api';
-import {buildMessageBody, buildNameListSection} from '../src/helpers/components.js';
+import {createMessage, getMembers, getMessage, updateMessage} from '../helpers/api';
+import {buildMessageBody, buildNameListSection} from '../helpers/components.js';
 // This file consists of several tests that I utilized to experiment with the Google Chat API.
 test.skip('get space memberships', async () => {
   // I move this to here for temporary, because this is skipped but affect the test coverage

@@ -3,7 +3,7 @@ import {
   buildMessageBody,
   buildNameListSection,
   buildNameListWinnerSection,
-} from '../src/helpers/components.js';
+} from '../helpers/components.js';
 
 test('build name list card', () => {
   const names = [
