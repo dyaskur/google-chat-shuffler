@@ -21,8 +21,9 @@ Features:
 - Unit Test (ready to TDD)
 - No database needed
 - Using google cloud task (AWS SQS equivalent)
+- Shuffle from input
 
 Coming soon:
 
-- Shuffle from input
 - Choose how many item will be showed
+- Make the app configurable (need a DB)

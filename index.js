@@ -1,6 +1,11 @@
 import {getMembers} from './helpers/api.js';
 import {buildActionResponse, buildActionResponseStatus} from './helpers/response.js';
-import {createMessageFromNameListHandler, updateWinnerCardHandler} from './handlers.js';
+import {
+  configCommandHandler,
+  createMessageFromNameListHandler,
+  helpCommandHandler,
+  updateWinnerCardHandler,
+} from './handlers.js';
 import {extractMessage} from './helpers/utils.js';
 import {buildInputForm} from './helpers/components.js';
 
@@ -37,6 +42,10 @@ export async function app(req, res) {
       const members = await getMembers(event.space.name);
       const memberNames = members.map((a) => a.member.displayName);
       await createMessageFromNameListHandler(memberNames, event.space.name, event.threadKey);
+    } else if (message.slashCommand?.commandId === '3') { // /help command
+      reply = helpCommandHandler(event);
+    } else if (message.slashCommand?.commandId === '4') { // /config command
+      reply = configCommandHandler(event);
     } else if (message.text) {
       const argumentText = event.message?.argumentText;
       const extractedText = extractMessage(argumentText);
@@ -65,7 +74,6 @@ export async function app(req, res) {
     const message = 'Hi there! You can shuffle your team mate using this app';
 
     reply = {
-      // thread: event.message.thread,
       actionResponse: {
         type: 'NEW_MESSAGE',
       },
