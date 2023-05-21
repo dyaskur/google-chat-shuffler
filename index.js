@@ -54,6 +54,14 @@ export async function app(req, res) {
         };
       }
     }
+  } else if (event.type === 'CARD_CLICKED') {
+    const action = event.common?.invokedFunction;
+    if (action === 'create_shuffle') {
+      const formValues = event.common?.formInputs;
+      const items = formValues?.['items']?.stringInputs.value[0]?.trim();
+      await createMessageFromNameListHandler(items.split('\n'), event.space.name, event.threadKey);
+      reply = buildActionResponseStatus('Your items/names are being shuffle');
+    }
   } else if (event.type === 'ADDED_TO_SPACE') {
     const message = {};
     message.text = 'Hi there! You can shuffle your team mate using this app';

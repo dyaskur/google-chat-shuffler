@@ -95,7 +95,7 @@ export function buildInputForm(defaultValues) {
             'textInput': {
               'label': 'Please input the items',
               'type': 'MULTIPLE_LINE',
-              'name': 'fieldName',
+              'name': 'items',
               'value': defaultValues.join('\n'),
             },
           },
@@ -107,7 +107,7 @@ export function buildInputForm(defaultValues) {
         'text': 'Submit',
         'onClick': {
           'action': {
-            'function': 'createShuffle',
+            'function': 'create_shuffle',
             'parameters': [],
           },
         },
