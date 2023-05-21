@@ -1,8 +1,9 @@
-import {createMessage, getMembers, updateMessage} from './src/helpers/api.js';
+import {createMessage, getMembers} from './src/helpers/api.js';
 
 import {buildActionResponseStatus} from './src/helpers/response.js';
 import {buildMessageBody, buildNameListSection} from './src/helpers/components.js';
 import {delayUpdateMessage} from './src/helpers/task.js';
+import {updateWinnerCardHandler} from './handlers.js';
 
 /**
  * App entry point.
@@ -11,23 +12,12 @@ import {delayUpdateMessage} from './src/helpers/task.js';
  * @returns {void}
  */
 export async function app(req, res) {
-  if (req.method === 'PATCH' && req.body) {
-    console.log('received from queue', req.body);
-    console.log(JSON.stringify(req.body));
-    // const messageResponse = await getMessage(message_id);
-
-    const message = {
-      text: 'This is updated message',
-    };
-    const request = {
-      name: req.body,
-      requestBody: message,
-      updateMask: 'text',
-    };
-    const apiResponse = await updateMessage(request);
-    console.log(JSON.stringify(apiResponse));
-    res.status(200).send('');
-  } else if (!(req.method === 'POST' && req.body)) {
+  const requestBody = req.body;
+  if (req.method === 'PATCH' && requestBody) {
+    console.log('received from queue', JSON.stringify(requestBody));
+    await updateWinnerCardHandler(requestBody);
+    res.status(201).send('');
+  } else if (!(req.method === 'POST' && requestBody)) {
     res.status(400).send('');
   }
   const event = req.body;
@@ -44,7 +34,8 @@ export async function app(req, res) {
       // todo: handle suffle form dialog
     } else if (message.slashCommand?.commandId === '2') {
       const members = await getMembers(event.space.name);
-      const cardSection = buildNameListSection(members.map((a) => a.member.displayName));
+      const memberNames = members.map((a) => a.member.displayName);
+      const cardSection = buildNameListSection(memberNames);
       const message = buildMessageBody(cardSection);
 
       const request = {
@@ -53,7 +44,11 @@ export async function app(req, res) {
       };
       const apiResponse = await createMessage(request);
       const messageId = apiResponse.data.name;
-      await delayUpdateMessage(messageId);
+      const payload = {
+        messageId,
+        names: memberNames,
+      };
+      await delayUpdateMessage(JSON.stringify(payload));
     } else if (message.text) {
       // todo: handle mentioned message
     }

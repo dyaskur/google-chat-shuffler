@@ -16,14 +16,13 @@ export async function delayUpdateMessage(payload) {
   const url = `https://${location}-${project}.cloudfunctions.net/app`;
   const inSeconds = 30;
 
-  console.log(project, location, queue);
   // Construct the fully qualified queue name.
   const parent = client.queuePath(project, location, queue);
 
   const task = {
     httpRequest: {
       headers: {
-        'Content-Type': 'text/plain', // Set content type to ensure compatibility your application's request parsing
+        'Content-Type': 'application/json', // Set content type to ensure compatibility your application's request parsing
       }, httpMethod: 'PATCH', url,
     },
   };

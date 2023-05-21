@@ -19,6 +19,7 @@
     "jest": "^29.5.0"
   },
   "jest": {
+    "transform": {},
     "collectCoverageFrom": [
       "src/helpers/{!(api|task),}.js"
     ]
