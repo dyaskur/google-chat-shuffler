@@ -17,3 +17,4 @@ tests
 assets
 *.md
 assets
+coverage

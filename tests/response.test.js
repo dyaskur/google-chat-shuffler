@@ -1,4 +1,4 @@
-import {buildActionResponse, buildActionResponseStatus} from '../src/helpers/response.js';
+import {buildActionResponse, buildActionResponseStatus} from '../helpers/response.js';
 
 test('response action status ', () => {
   const actionResponse = buildActionResponseStatus('hello');

@@ -1,9 +1,9 @@
-import {createMessage, getMembers} from './src/helpers/api.js';
+import {createMessage, getMembers} from './helpers/api.js';
 
-import {buildActionResponse, buildActionResponseStatus} from './src/helpers/response.js';
+import {buildActionResponse, buildActionResponseStatus} from './helpers/response.js';
 import {createMessageFromNameListHandler, updateWinnerCardHandler} from './handlers.js';
-import {extractMessage} from './src/helpers/utils.js';
-import {buildInputForm} from './src/helpers/components.js';
+import {extractMessage} from './helpers/utils.js';
+import {buildInputForm} from './helpers/components.js';
 
 /**
  * App entry point.
@@ -29,12 +29,12 @@ export async function app(req, res) {
   // Dispatch slash and action events
   if (event.type === 'MESSAGE') {
     const message = event.message;
-    if (message.slashCommand?.commandId === '1') {
+    if (message.slashCommand?.commandId === '1') { // /shuffle command
       const members = await getMembers(event.space.name);
       const memberNames = members.map((a) => a.member.displayName);
       const inputFormCard = buildInputForm(memberNames);
       reply = buildActionResponse('DIALOG', inputFormCard);
-    } else if (message.slashCommand?.commandId === '2') {
+    } else if (message.slashCommand?.commandId === '2') { // /shuffle_members command
       const members = await getMembers(event.space.name);
       const memberNames = members.map((a) => a.member.displayName);
       await createMessageFromNameListHandler(memberNames, event.space.name, event.threadKey);

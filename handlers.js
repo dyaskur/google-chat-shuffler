@@ -1,7 +1,7 @@
-import {buildMessageBody, buildNameListSection, buildNameListWinnerSection} from './src/helpers/components.js';
-import {createMessage, updateMessage} from './src/helpers/api.js';
-import {getRandomWinners} from './src/helpers/utils.js';
-import {delayUpdateMessage} from './src/helpers/task.js';
+import {buildMessageBody, buildNameListSection, buildNameListWinnerSection} from './helpers/components.js';
+import {createMessage, updateMessage} from './helpers/api.js';
+import {getRandomWinners} from './helpers/utils.js';
+import {delayUpdateMessage} from './helpers/task.js';
 
 /**
  * @param {object} requestBody - list of names
