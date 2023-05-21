@@ -1,6 +1,6 @@
 import {createMessage, getMembers, updateMessage} from './src/helpers/api.js';
 
-import {buildActionResponse} from './src/helpers/response.js';
+import {buildActionResponseStatus} from './src/helpers/response.js';
 import {buildMessageBody, buildNameListSection} from './src/helpers/components.js';
 import {delayUpdateMessage} from './src/helpers/task.js';
 
@@ -67,9 +67,9 @@ export async function app(req, res) {
     };
     const apiResponse = await createMessage(request);
     if (apiResponse) {
-      reply = buildActionResponse('Thanks for installing our app', 'OK');
+      reply = buildActionResponseStatus('Thanks for installing our app', 'OK');
     } else {
-      reply = buildActionResponse('Failed to send welcome.', 'UNKNOWN');
+      reply = buildActionResponseStatus('Failed to send welcome.', 'UNKNOWN');
     }
   }
   res.json(reply);
