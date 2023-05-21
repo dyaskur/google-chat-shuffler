@@ -21,7 +21,7 @@
   "jest": {
     "transform": {},
     "collectCoverageFrom": [
-      "src/helpers/{!(api|task),}.js"
+      "helpers/{!(api|task),}.js"
     ]
   },
   "type": "module"
