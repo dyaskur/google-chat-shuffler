@@ -12,15 +12,15 @@ import {updateWinnerCardHandler} from './handlers.js';
  * @returns {void}
  */
 export async function app(req, res) {
-  const requestBody = req.body;
-  if (req.method === 'PATCH' && requestBody) {
-    console.log('received from queue', JSON.stringify(requestBody));
-    await updateWinnerCardHandler(requestBody);
+  const event = req.body;
+  if (req.method === 'PATCH' && event) {
+    console.log('received from queue', JSON.stringify(event));
+    await updateWinnerCardHandler(event);
     res.status(201).send('');
-  } else if (!(req.method === 'POST' && requestBody)) {
+  } else if (!(req.method === 'POST' && event)) {
+    console.log('received from unknown source', JSON.stringify(event));
     res.status(400).send('');
   }
-  const event = req.body;
   console.log(JSON.stringify(event));
   console.log(event.type,
       event.common?.invokedFunction || event.message?.slashCommand?.commandId || event.message?.argumentText,
@@ -40,9 +40,15 @@ export async function app(req, res) {
 
       const request = {
         parent: event.space.name,
+        threadKey: event.threadKey ?? event.message.thread.name,
         requestBody: message,
+        messageReplyOption: 'REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD',
       };
-      const apiResponse = await createMessage(request);
+      const apiResponse = await createMessage(request, {
+        thread: {name: event.message.thread.name},
+        threadKey: event.threadKey ?? event.message.thread.name,
+      });
+
       const messageId = apiResponse.data.name;
       const payload = {
         messageId,

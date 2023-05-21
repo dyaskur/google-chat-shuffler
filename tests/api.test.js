@@ -1,7 +1,7 @@
 import {createMessage, getMembers, getMessage, updateMessage} from '../src/helpers/api';
 import {buildMessageBody, buildNameListSection} from '../src/helpers/components.js';
 // This file consists of several tests that I utilized to experiment with the Google Chat API.
-test.skip('get space memberships', async () => {
+test('get space memberships', async () => {
   // I move this to here for temporary, because this is skipped but affect the test coverage
 
   const members = await getMembers('spaces/AAAAqFtzdps');
@@ -10,11 +10,11 @@ test.skip('get space memberships', async () => {
 
   // const memberName = members.map(a => a.member.displayName);
   // const memberName = ['1', '2', '3', '4', '5', '6'];
-  const memberName = Array.from({length: 32}, (_, i) => (i + 1).toString());
+  const memberName = Array.from({length: 4}, (_, i) => (i + 1).toString());
 
   const cardSection = buildNameListSection(memberName);
   const message = buildMessageBody(cardSection);
-  const options = {thread: {name: 'spaces/AAAAqFtzdps/threads/pfyovAULzfo'}};
+  const options = {thread: {name: 'spaces/AAAAqFtzdps/threads/G2roxVDvFnU'}};
 
   const request = {
     parent: 'spaces/AAAAqFtzdps',
@@ -25,6 +25,8 @@ test.skip('get space memberships', async () => {
   options.threadKey = options.thread.name;
 
   const apiResponse = await createMessage(request, options);
+  console.log(JSON.stringify(apiResponse));
+
   const messageId = apiResponse.data.name;
   const messageResponse = await getMessage(messageId);
   console.log(messageResponse);

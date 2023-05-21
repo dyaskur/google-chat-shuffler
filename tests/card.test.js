@@ -70,7 +70,7 @@ test('build name list card with a winner', () => {
     'Zulkarnain',
     'Sulaiman',
   ];
-  const winnerSection = buildNameListWinnerSection(names, ['Yaskur']);
+  const winnerSection = buildNameListWinnerSection(names, ['Moses']);
   const expected = {
     'sections': [
       {
