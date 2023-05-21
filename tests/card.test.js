@@ -1,4 +1,9 @@
-import {buildMessageBody, buildNameListSection, buildNameListWinnerSection} from '../src/helpers/components.js';
+import {
+  buildInputForm,
+  buildMessageBody,
+  buildNameListSection,
+  buildNameListWinnerSection,
+} from '../src/helpers/components.js';
 
 test('build name list card', () => {
   const names = [
@@ -120,4 +125,43 @@ test('build name list card with a winner', () => {
     ],
   };
   expect(winnerSection).toStrictEqual(expected);
+});
+
+test('buildInputForm test', () => {
+  const defaultValues = ['Ismail bin Ibrahim', 'Ishaq bin Ibrahim', 'Isa bin Mariyam'];
+  const form = buildInputForm(defaultValues);
+  expect(form).toEqual({
+    'fixedFooter': {
+      'primaryButton': {
+        'onClick': {
+          'action': {
+            'function': 'create_shuffle',
+            'parameters': [],
+          },
+        },
+        'text': 'Submit',
+      },
+    },
+    'header': {
+      'imageType': 'CIRCLE',
+      'imageUrl': '',
+      'subtitle': 'If the items are more than 32, the items will be randomly cut to 32',
+      'title': 'Maximum item is 32.',
+    },
+    'sections': [
+      {
+        'header': 'Names',
+        'widgets': [
+          {
+            'textInput': {
+              'label': 'Please input the items',
+              'name': 'items',
+              'type': 'MULTIPLE_LINE',
+              'value': 'Ismail bin Ibrahim\nIshaq bin Ibrahim\nIsa bin Mariyam',
+            },
+          },
+        ],
+      },
+    ],
+  });
 });
