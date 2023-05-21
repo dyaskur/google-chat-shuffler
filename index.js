@@ -1,8 +1,9 @@
 import {createMessage, getMembers} from './src/helpers/api.js';
 
-import {buildActionResponseStatus} from './src/helpers/response.js';
+import {buildActionResponse, buildActionResponseStatus} from './src/helpers/response.js';
 import {createMessageFromNameListHandler, updateWinnerCardHandler} from './handlers.js';
 import {extractMessage} from './src/helpers/utils.js';
+import {buildInputForm} from './src/helpers/components.js';
 
 /**
  * App entry point.
@@ -29,8 +30,10 @@ export async function app(req, res) {
   if (event.type === 'MESSAGE') {
     const message = event.message;
     if (message.slashCommand?.commandId === '1') {
-      // reply = showShuffleForm(event);
-      // todo: handle shuffle form dialog
+      const members = await getMembers(event.space.name);
+      const memberNames = members.map((a) => a.member.displayName);
+      const inputFormCard = buildInputForm(memberNames);
+      reply = buildActionResponse('DIALOG', inputFormCard);
     } else if (message.slashCommand?.commandId === '2') {
       const members = await getMembers(event.space.name);
       const memberNames = members.map((a) => a.member.displayName);
