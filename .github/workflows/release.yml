@@ -5,6 +5,7 @@ on:
   workflow_run:
     workflows: [Nganu]
     types: [completed]
+    branches: ["dev"]
 jobs:
   deploy:
     name: "Deploy Releasez"
