@@ -5,7 +5,7 @@ on:
   workflow_run:
     workflows: [ "Node.js CI" ]
     types: [ completed ]
-    branches: [ "master" ]
+    branches: [ "dev" ]
 jobs:
   deploy:
     name: "Deploy Releasez"
