@@ -1,10 +1,5 @@
 name: "Deploy"
 
-on:
-  workflow_run:
-    workflows: ["Node.js CI"]
-    types: ["completed"]
-    branches: [ "dev" ]
 permissions: write-all
 jobs:
   tagged-release:
