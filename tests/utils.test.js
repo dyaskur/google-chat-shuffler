@@ -14,18 +14,14 @@ test('get the winner', () => {
 
 const dataSet = [
   [
-    'nganu "anu kae" super "sekali kae lo"', [
-      'nganu', 'anu kae', 'super', 'sekali kae lo',
+    '"anu kae" "super" "sekali kae lo"', [
+      'anu kae', 'super', 'sekali kae lo',
     ]],
   [
-    'nganu kae', [
-      'nganu', 'kae',
-    ],
+    'nganu kae', [],
   ],
   [
-    'z', [
-      'z',
-    ],
+    'z', [],
   ],
 ];
 it.each(dataSet)('Extract message using regex', (input, expectedValue) => {

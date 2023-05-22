@@ -29,17 +29,18 @@ export async function app(req, res) {
   console.log(JSON.stringify(event));
   console.log(event.type,
       event.common?.invokedFunction || event.message?.slashCommand?.commandId || event.message?.argumentText,
-      event.user.displayName, event.user.email, event.space.type, event.space.name);
+      event.user.displayName, event.user.email, event.space.type, event.space.name, event.threadKey);
+  event.threadKey = event.threadKey ?? event.message?.thread?.name;
   let reply = {};
   // Dispatch slash and action events
   if (event.type === 'MESSAGE') {
     const message = event.message;
-    if (message.slashCommand?.commandId === '1') { // /shuffle command
+    if (message.slashCommand?.commandId === '1') { // /random command
       const members = await getMembers(event.space.name);
       const memberNames = members.map((a) => a.member.displayName);
       const inputFormCard = buildInputForm(memberNames);
       reply = buildActionResponse('DIALOG', inputFormCard);
-    } else if (message.slashCommand?.commandId === '2') { // /shuffle_members command
+    } else if (message.slashCommand?.commandId === '2') { // /random_members command
       const members = await getMembers(event.space.name);
       const memberNames = members.map((a) => a.member.displayName);
       await createMessageFromNameListHandler(memberNames, event.space.name, event.threadKey);
@@ -47,7 +48,7 @@ export async function app(req, res) {
       reply = helpCommandHandler(event);
     } else if (message.slashCommand?.commandId === '4') { // /config command
       reply = configCommandHandler(event);
-    } else if (message.slashCommand?.commandId === '5') { // /shuffle_gpt command
+    } else if (message.slashCommand?.commandId === '5') { // /random_gpt command
       const answer = await getRandomFromGpt(event.message.argumentText ?? 'whatever');
       reply = {
         thread: event.message.thread,
@@ -62,13 +63,13 @@ export async function app(req, res) {
       if (extractedText.length > 1) {
         await createMessageFromNameListHandler(extractedText, event.space.name, event.threadKey);
       } else {
+        const answer = await getRandomFromGpt(argumentText ?? 'whatever');
         reply = {
           thread: event.message.thread,
           actionResponse: {
             type: 'NEW_MESSAGE',
           },
-          text: 'Sorry you need at least 2 items to do shuffle. Try *@Shuffle Maven "Alexandro Manta" "Hasan Monero"*. ' +
-              'Or you can also use */shuffle_members* command to quick shuffle all member of this space',
+          text: answer,
         };
       }
     }
@@ -77,11 +78,20 @@ export async function app(req, res) {
     if (action === 'create_shuffle') {
       const formValues = event.common?.formInputs;
       const items = formValues?.['items']?.stringInputs.value[0]?.trim();
-      await createMessageFromNameListHandler(items.split('\n'), event.space.name, event.threadKey);
-      reply = buildActionResponseStatus('Your items/names are being shuffle');
+      await createMessageFromNameListHandler(items.split('\n'), event.uspace.name, event.threadKey);
+      reply = buildActionResponseStatus('Your items/names are being shffle');
     }
   } else if (event.type === 'ADDED_TO_SPACE') {
-    const message = 'Hi there! You can shuffle your team mate using this app';
+    const message = `Hi ${event.user.displayName ?? 'there'}, Thanks for installing our app
+  Here are the list of available commands:
+  */random* Opens a dialog where you can input the items/names to be shuffled. By default, it is pre-filled with the list of members in the current space.
+  */random_members* Quickly shuffle all members of the current space.
+  */random_gpt* Effortlessly generate quick and random content with the power of GPT commands.
+  */config* Displays the current configuration dialog.
+  */help* Show more detailed instruction how to use this app
+  
+  You can also shuffle by mentioning this app, use */help* command for more info
+  `;
 
     reply = {
       actionResponse: {

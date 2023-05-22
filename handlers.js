@@ -54,11 +54,16 @@ export async function createMessageFromNameListHandler(names, space, thread = nu
 export function helpCommandHandler(event) {
   const message = `Hi ${event.user.displayName}
   Here are the list of available commands:
-  */shuffle* Opens a dialog where you can input the items/names to be shuffled. By default, it is pre-filled with the list of members in the current space.
-  */shuffle_members* Quickly shuffle all members of the current space.
+  */random* Opens a dialog where you can input the items/names to be shuffled. By default, it is pre-filled with the list of members in the current space.
+  */random_members* Quickly get a member of the current space. It's using a simple animation during randomizing
+  */random_gpt* Get quick random staff using GPT command 
+  example 1: */random_gpt number from 1 to 100* it will return a number between 1 to 100
+  example 2: */random_gpt place to visit in Egypt* it will return a random place in Egypt
   */config* Displays the current configuration dialog.
   
-  You can also shuffle by mentioning this app, for example: *@Shuffle Maven "Zubair Manta" "Hasan Star" "Kawasaki Honda"* 
+  Discover the power of randomization by mentioning this app. By enclosing your request within double quotes, you can retrieve a random staff from the chat message. Alternatively, without double quotes, the app will utilize your message as a GPT command to generate a staff for you.
+  example 1(with double quote): *@Randombot "Zubair Manta" "Hasan Star" "Kawasaki Honda"* will shuffle the list given
+  example 2(without double quote): *@Randombot number between 10 and 20* just like */random_gpt* command, it will return a number between 10 and 20
   `;
   return {
     thread: event.message.thread,
