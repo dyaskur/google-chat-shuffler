@@ -7,7 +7,7 @@ on:
     types: [completed]
 jobs:
   deploy:
-    name: "Deploy Release"
+    name: "Deploy Releasez"
     runs-on: "ubuntu-latest"
 
     steps:
