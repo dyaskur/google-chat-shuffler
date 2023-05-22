@@ -3,9 +3,9 @@ name: "Deploy"
 
 on:
   workflow_run:
-    workflows: ["Node.js CI"]
-    types: ["completed"]
-permissions: write-all
+    workflows: ["Node.js CI**"]
+    types: [completed]
+permissions: read-all|write-all
 jobs:
   deploy:
     name: "Deploy Release"
