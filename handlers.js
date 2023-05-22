@@ -57,8 +57,10 @@ export function helpCommandHandler(event) {
   */random* Opens a dialog where you can input the items/names to be shuffled. By default, it is pre-filled with the list of members in the current space.
   */random_members* Quickly get a member of the current space. It's using a simple animation during randomizing
   */random_gpt* Get quick random staff using GPT command 
-  example 1: */random_gpt number from 1 to 100* it will return a number between 1 to 100
+  example 1: */random_gpt number from 1 to 100* it will return a number between 1 to 100 (e.g 12)
   example 2: */random_gpt place to visit in Egypt* it will return a random place in Egypt
+  example 3: */random_gpt joke about programmer* it will return a joke related to programmer
+  example 4: */random_gpt quote for broken heart* it will return a quote to motivate the broken heart person
   */config* Displays the current configuration dialog.
   
   Discover the power of randomization by mentioning this app. By enclosing your request within double quotes, you can retrieve a random staff from the chat message. Alternatively, without double quotes, the app will utilize your message as a GPT command to generate a staff for you.
