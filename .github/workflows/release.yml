@@ -5,8 +5,7 @@ on:
     workflows: ["Node.js CI"]
     types:
       - completed
-    push:
-      branches: [ "master" ]
+    branches: [ "dev" ]
 permissions: write-all
 jobs:
   tagged-release:
