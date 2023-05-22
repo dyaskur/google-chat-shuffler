@@ -6,7 +6,7 @@ import {
   helpCommandHandler,
   updateWinnerCardHandler,
 } from './handlers.js';
-import {extractMessage} from './helpers/utils.js';
+import {extractConfig, extractMessageByDoubleQuote} from './helpers/utils.js';
 import {buildInputForm} from './helpers/components.js';
 import {getRandomFromGpt} from './helpers/gpt.js';
 
@@ -43,7 +43,18 @@ export async function app(req, res) {
     } else if (message.slashCommand?.commandId === '2') { // /random_members command
       const members = await getMembers(event.space.name);
       const memberNames = members.map((a) => a.member.displayName);
-      await createMessageFromNameListHandler(memberNames, event.space.name, event.threadKey);
+      const winnerCount = parseInt(event.message.argumentText) || 1;
+      if (winnerCount > memberNames.length) {
+        reply = {
+          thread: event.message.thread,
+          actionResponse: {
+            type: 'NEW_MESSAGE',
+          },
+          text: 'Your space members is not enough',
+        };
+      } else {
+        await createMessageFromNameListHandler(memberNames, event.space.name, event.threadKey, winnerCount);
+      }
     } else if (message.slashCommand?.commandId === '3') { // /help command
       reply = helpCommandHandler(event);
     } else if (message.slashCommand?.commandId === '4') { // /config command
@@ -59,9 +70,18 @@ export async function app(req, res) {
       };
     } else if (message.text) {
       const argumentText = event.message?.argumentText;
-      const extractedText = extractMessage(argumentText);
+      const extractedText = extractMessageByDoubleQuote(argumentText);
       if (extractedText.length > 1) {
-        await createMessageFromNameListHandler(extractedText, event.space.name, event.threadKey);
+        let winnerCount = 1;
+        const configs = extractConfig(argumentText, extractedText);
+        configs.forEach((config) => {
+          const winnerConfig = parseInt(config);
+          // If the argument is a number, we will assume it is a config indicating the number of winners to choose.
+          if (winnerConfig && winnerConfig < extractedText.length) {
+            winnerCount = winnerConfig;
+          }
+        });
+        await createMessageFromNameListHandler(extractedText, event.space.name, event.threadKey, winnerCount);
       } else {
         const answer = await getRandomFromGpt(argumentText ?? 'whatever');
         reply = {
@@ -78,8 +98,8 @@ export async function app(req, res) {
     if (action === 'create_shuffle') {
       const formValues = event.common?.formInputs;
       const items = formValues?.['items']?.stringInputs.value[0]?.trim();
-      await createMessageFromNameListHandler(items.split('\n'), event.uspace.name, event.threadKey);
-      reply = buildActionResponseStatus('Your items/names are being shffle');
+      await createMessageFromNameListHandler(items.split('\n'), event.space.name, event.threadKey);
+      reply = buildActionResponseStatus('Your items/names are being shuffle');
     }
   } else if (event.type === 'ADDED_TO_SPACE') {
     const message = `Hi ${event.user.displayName ?? 'there'}, Thanks for installing our app
