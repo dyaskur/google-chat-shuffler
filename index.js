@@ -8,6 +8,7 @@ import {
 } from './handlers.js';
 import {extractMessage} from './helpers/utils.js';
 import {buildInputForm} from './helpers/components.js';
+import {getRandomFromGpt} from './helpers/gpt.js';
 
 /**
  * App entry point.
@@ -46,6 +47,15 @@ export async function app(req, res) {
       reply = helpCommandHandler(event);
     } else if (message.slashCommand?.commandId === '4') { // /config command
       reply = configCommandHandler(event);
+    } else if (message.slashCommand?.commandId === '5') { // /shuffle_gpt command
+      const answer = await getRandomFromGpt(event.message.argumentText ?? 'whatever');
+      reply = {
+        thread: event.message.thread,
+        actionResponse: {
+          type: 'NEW_MESSAGE',
+        },
+        text: answer,
+      };
     } else if (message.text) {
       const argumentText = event.message?.argumentText;
       const extractedText = extractMessage(argumentText);
