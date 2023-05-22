@@ -78,8 +78,8 @@ export async function app(req, res) {
     if (action === 'create_shuffle') {
       const formValues = event.common?.formInputs;
       const items = formValues?.['items']?.stringInputs.value[0]?.trim();
-      await createMessageFromNameListHandler(items.split('\n'), event.uspace.name, event.threadKey);
-      reply = buildActionResponseStatus('Your items/names are being shffle');
+      await createMessageFromNameListHandler(items.split('\n'), event.space.name, event.threadKey);
+      reply = buildActionResponseStatus('Your items/names are being shuffle');
     }
   } else if (event.type === 'ADDED_TO_SPACE') {
     const message = `Hi ${event.user.displayName ?? 'there'}, Thanks for installing our app
