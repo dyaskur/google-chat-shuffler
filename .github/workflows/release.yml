@@ -2,8 +2,9 @@ name: "Deploy"
 
 
 on:
-  push:
-
+  workflow_run:
+    workflows: ["Node.js CI"]
+    types: ["completed"]
 permissions: write-all
 jobs:
   deploy:
