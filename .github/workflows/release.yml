@@ -1,9 +1,12 @@
-name: "tagged-release"
+name: "Deploy"
 
 on:
-  push:
-    tags:
-      - "v*"
+  workflow_run:
+    workflows: ["Node.js CI"]
+    types:
+      - completed
+    push:
+      branches: [ "master" ]
 permissions: write-all
 jobs:
   tagged-release:
@@ -11,16 +14,13 @@ jobs:
     runs-on: "ubuntu-latest"
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Archive Release
-        uses: thedoctor0/zip-release@0.7.1
+      - uses: actions/checkout@v3
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v1'
         with:
-          type: 'zip'
-          filename: 'release.zip'
-          exclusions: '*.git* /*node_modules/* /*tests/* *tests/* *.github*'
-
-      - name: Upload Release
-        uses: ncipollo/release-action@v1.12.0
+          credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
+      - id: 'deploy'
+        uses: 'google-github-actions/deploy-cloud-functions@v1'
         with:
-          artifacts: "release.zip"
-          token: ${{ secrets.GITHUB_TOKEN }}
+          name: 'app'
+          runtime: 'nodejs18'

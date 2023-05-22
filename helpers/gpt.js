@@ -21,6 +21,9 @@ export async function getRandomFromGpt(something) {
     prompt: generatePrompt(something),
     temperature: 0.6,
   });
-
-  return completion.data?.choices[0]?.text ?? 'Sorry I don\'t know what you mean';
+  let answer = 'Sorry I don\'t know what you mean';
+  if (completion.data?.choices.length > 0) {
+    answer = completion.data?.choices.map((a) => a.text).join(' ');
+  }
+  return answer;
 }

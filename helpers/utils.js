@@ -16,6 +16,10 @@ export function getRandomWinners(names, winnerCount = 1) {
  * @returns {array} list of extracted text
  */
 export function extractMessage(string) {
-  const regex = /"[^"]+"|[^\s]+/g;
-  return string.match(regex).map((s) => s.replace(/"(.+)"/, '$1'));
+  const regex = /"[^"]+"/g;
+  const extracted = string.match(regex);
+  if (extracted) {
+    return extracted.map((s) => s.replace(/"(.+)"/, '$1'));
+  }
+  return [];
 }
