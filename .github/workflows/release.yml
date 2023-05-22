@@ -2,10 +2,7 @@ name: "Deploy"
 
 
 on:
-  workflow_run:
-    workflows: [Nganu]
-    types: [completed]
-    branches: [ "dev" ]
+  push:
 permissions: read-all|write-all
 jobs:
   deploy:
