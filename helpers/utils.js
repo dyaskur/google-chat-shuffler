@@ -15,11 +15,31 @@ export function getRandomWinners(names, winnerCount = 1) {
  * @param {string} string - text that will be extracted
  * @returns {array} list of extracted text
  */
-export function extractMessage(string) {
+export function extractMessageByDoubleQuote(string) {
   const regex = /"[^"]+"/g;
   const extracted = string.match(regex);
   if (extracted) {
     return extracted.map((s) => s.replace(/"(.+)"/, '$1'));
   }
   return [];
+}
+
+/**
+ * @param {string} string - text that will be extracted
+ * @returns {array} list of extracted text
+ */
+export function extractMessageAndConfig(string) {
+  const regex = /"[^"]+"|[^\s]+/g;
+  return string.match(regex).map((s) => s.replace(/"(.+)"/, '$1'));
+}
+
+/**
+ * Config means anything else beside string inside quote
+ * @param {string} argumentText -
+ * @param {array} messages - extracted messages
+ * @returns {array} extracted command
+ */
+export function extractConfig(argumentText, messages) {
+  const extractedTextCommands = extractMessageAndConfig(argumentText);
+  return extractedTextCommands.filter((val) => !messages.includes(val));
 }

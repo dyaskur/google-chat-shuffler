@@ -10,7 +10,8 @@ import {buildActionResponse} from './helpers/response.js';
  */
 export async function updateWinnerCardHandler(requestBody) {
   const names = requestBody.names;
-  const winner = getRandomWinners(names);
+  const winnerCount = requestBody.count ?? 1;
+  const winner = getRandomWinners(names, winnerCount);
   const messageText = `Congratulations! We have shuffled the list of names and the winner is *${winner.join(',')}*.`;
   const message = buildMessageBody(buildNameListWinnerSection(names, winner), messageText);
   const request = {
@@ -25,9 +26,10 @@ export async function updateWinnerCardHandler(requestBody) {
  * @param {array} names - list of name that will be shuffled
  * @param {string} space - google chat space name
  * @param {string} thread - chat thread/parent
+ * @param {integer} count - winner count
  * @returns {Promise<void>} will post the message to google API
  */
-export async function createMessageFromNameListHandler(names, space, thread = null) {
+export async function createMessageFromNameListHandler(names, space, thread = null, count = 1) {
   const cardSection = buildNameListSection(names);
   const message = buildMessageBody(cardSection);
 
@@ -43,6 +45,7 @@ export async function createMessageFromNameListHandler(names, space, thread = nu
   const payload = {
     messageId,
     names: names,
+    count,
   };
   await delayUpdateMessage(JSON.stringify(payload));
 }
@@ -55,8 +58,8 @@ export function helpCommandHandler(event) {
   const message = `Hi ${event.user.displayName}
   Here are the list of available commands:
   */random* Opens a dialog where you can input the items/names to be shuffled. By default, it is pre-filled with the list of members in the current space.
-  */random_members* Quickly get a member of the current space. It's using a simple animation during randomizing
-  */random_gpt* Get quick random staff using GPT command 
+  */random_members {count}* Quickly get a member of the current space. It's using a simple animation during randomizing
+  */random_gpt {your_prompt}* Get quick random staff using GPT command 
   example 1: */random_gpt number from 1 to 100* it will return a number between 1 to 100 (e.g 12)
   example 2: */random_gpt place to visit in Egypt* it will return a random place in Egypt
   example 3: */random_gpt joke about programmer* it will return a joke related to programmer
@@ -66,6 +69,7 @@ export function helpCommandHandler(event) {
   Discover the power of randomization by mentioning this app. By enclosing your request within double quotes, you can retrieve a random staff from the chat message. Alternatively, without double quotes, the app will utilize your message as a GPT command to generate a staff for you.
   example 1(with double quote): *@Randombot "Zubair Manta" "Hasan Star" "Kawasaki Honda"* will shuffle the list given
   example 2(without double quote): *@Randombot number between 10 and 20* just like */random_gpt* command, it will return a number between 10 and 20
+  example 3: *@Randombot number between 10 and 20* just like */random_gpt* command, it will return a number between 10 and 20
   `;
   return {
     thread: event.message.thread,
