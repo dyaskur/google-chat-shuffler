@@ -1,10 +1,7 @@
 name: "Deploy"
 
 on:
-  workflow_run:
-    workflows: [ "Node.js CI" ]
-    types: [ completed ]
-    branches: [ "master" ]
+  release:
 jobs:
   deploy:
     name: "Deploy Release"
