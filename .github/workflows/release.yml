@@ -5,6 +5,7 @@ on:
   workflow_run:
     workflows: ["Node.js CI"]
     types: [completed]
+    branches: [ "dev" ]
 permissions: read-all|write-all
 jobs:
   deploy:
