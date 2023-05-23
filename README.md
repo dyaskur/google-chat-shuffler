@@ -29,6 +29,13 @@
 - Make the app configurable (need a DB)
 - Scheduler (example use case: send daily quote or motivation to google chat space)
 
+#### Screenshot: 
+- Random based on input in mentioned message:
+  - ![screenshot.gif](assets%2Fscreenshot.gif)
+- Random member of current google chat space
+  - ![screenshot2.png](assets%2Fscreenshot2.png)
+- You can also get random quotes, motivation, number, places or anything else using this app
+  - ![screenshot1.png](assets%2Fscreenshot1.png)
 
 #### Prerequisites:
 - Minimum NodeJS 16 
