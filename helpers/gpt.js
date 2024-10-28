@@ -1,10 +1,8 @@
-import {Configuration, OpenAIApi} from 'openai';
+import OpenAI from 'openai';
 
-const configuration = new Configuration({
+const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
-
-const openai = new OpenAIApi(configuration);
 
 /**
  * @param {string} something - thing that will get a random of it
@@ -16,15 +14,15 @@ function generatePrompt(something) {
 
 // eslint-disable-next-line require-jsdoc
 export async function getRandomFromGpt(something) {
-  const completion = await openai.createCompletion({
-    model: 'text-davinci-003',
-    prompt: generatePrompt(something),
+  const completion = await openai.chat.completions.create({
+    model: 'gpt-4o-mini',
+    messages: [{role: 'user', content: generatePrompt(something)}],
     temperature: 0.6,
     max_tokens: 65,
   });
   let answer = 'Sorry I don\'t know what you mean';
-  if (completion.data?.choices.length > 0) {
-    answer = completion.data?.choices.map((a) => a.text.replace(/(\r\n|\n|\r)/gm, '')).join('\n');
+  if (completion?.choices.length > 0) {
+    answer = completion.choices.map((a) => a.message.content.replace(/(\r\n|\n|\r)/gm, '')).join('\n');
   }
   return answer;
 }
