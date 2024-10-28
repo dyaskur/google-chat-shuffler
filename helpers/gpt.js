@@ -1,9 +1,5 @@
 import OpenAI from 'openai';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
 /**
  * @param {string} something - thing that will get a random of it
  * @returns {string} the prompt for gpt
@@ -14,6 +10,10 @@ function generatePrompt(something) {
 
 // eslint-disable-next-line require-jsdoc
 export async function getRandomFromGpt(something) {
+  const openai = new OpenAI({
+    apiKey: process.env?.OPENAI_API_KEY,
+  });
+
   const completion = await openai.chat.completions.create({
     model: 'gpt-4o-mini',
     messages: [{role: 'user', content: generatePrompt(something)}],
