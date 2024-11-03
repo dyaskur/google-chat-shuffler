@@ -29,7 +29,7 @@ export async function app(req, res) {
   console.log(JSON.stringify(event));
   console.log(event.type,
       event.common?.invokedFunction || event.message?.slashCommand?.commandId || event.message?.argumentText,
-      event.user.displayName, event.user.email, event.space.type, event.space.name, event.threadKey);
+      event.user?.displayName, event.user?.email, event.space.type, event.space.name, event.threadKey);
   event.threadKey = event.threadKey ?? event.message?.thread?.name;
   let reply = {};
   // Dispatch slash and action events
