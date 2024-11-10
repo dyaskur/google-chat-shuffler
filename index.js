@@ -6,7 +6,7 @@ import {
   helpCommandHandler,
   updateWinnerCardHandler,
 } from './handlers.js';
-import {extractConfig, extractMessageByDoubleQuote} from './helpers/utils.js';
+import {extractConfig, extractMessageByDoubleQuote, generateRandomNumbers, shuffle} from './helpers/utils.js';
 import {buildInputForm} from './helpers/components.js';
 import {getRandomFromGpt} from './helpers/gpt.js';
 
@@ -84,13 +84,31 @@ export async function app(req, res) {
         await createMessageFromNameListHandler(extractedText, event.space.name, event.threadKey, winnerCount);
       } else {
         const answer = await getRandomFromGpt(argumentText ?? 'whatever');
-        reply = {
-          thread: event.message.thread,
-          actionResponse: {
-            type: 'NEW_MESSAGE',
-          },
-          text: answer,
-        };
+        // console.log(answer);
+        if (answer) {
+          let {context, expectedCount, items} = answer;
+          if (context === 'random_number') {
+            const range = items[0].split('-');
+            items = generateRandomNumbers(parseInt(range[0]), parseInt(range[1]));
+          }
+          let take = expectedCount * 3 > items.length ? items.length : expectedCount * 3;
+          if (take > 20) {
+            take = 20;
+          }
+          console.log('context', context, 'expectedCount', expectedCount, 'items', items);
+          items = shuffle(items).slice().slice(0, take);
+          if (expectedCount === 100 || expectedCount > items.length) {
+            expectedCount = 1;
+          }
+          await createMessageFromNameListHandler(items, event.space.name, event.threadKey, expectedCount);
+          reply = {
+            thread: event.message.thread,
+            actionResponse: {
+              type: 'NEW_MESSAGE',
+            },
+            text: answer,
+          };
+        }
       }
     }
   } else if (event.type === 'CARD_CLICKED') {

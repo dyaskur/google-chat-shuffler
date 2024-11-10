@@ -43,3 +43,29 @@ export function extractConfig(argumentText, messages) {
   const extractedTextCommands = extractMessageAndConfig(argumentText);
   return extractedTextCommands.filter((val) => !messages.includes(val));
 }
+
+/**
+ * Randomly shuffles an array in place using the Fisher-Yates algorithm.
+ *
+ * @param {array} array - The array to be shuffled.
+ * @returns {array} - The shuffled array.
+ */
+export function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+
+/**
+ * helper function to generate random numbers
+ *
+ * @param {number} start - the start of the range
+ * @param {number} end - the end of the range
+ * @returns {number[]} - an array of random numbers
+ */
+export function generateRandomNumbers(start, end) {
+  return Array.from({length: end - start + 1}, (_, i) => i + start);
+}
