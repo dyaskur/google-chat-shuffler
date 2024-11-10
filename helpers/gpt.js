@@ -22,9 +22,6 @@ import crypto from 'crypto';
  * // => {context: "random_number", expectedCount: 1, items: ["5-10"]}
  */
 export async function getRandomFromGpt(something) {
-  const somethingMd5 = crypto.createHash('md5').update(something).digest('hex');
-  const client = new Redis(process.env.REDIS_URL);
-  const lastAnswers = await client.get(somethingMd5);
   const openai = new OpenAI({
     apiKey: process.env?.OPENAI_API_KEY,
   });
